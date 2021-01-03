@@ -83,7 +83,7 @@
       // Array.prototype.map()
       // 2. Give us an array of the inventors first and last names
       const firstAndLastNames = inventors.map((inventor) => {
-        return `${inventor.first} ${inventor.last}`;
+        return `${inventor.first} ${inventor.last}`; //inventor.first + " " + inventor.last
       });
 
       console.log("firstAndLastName", firstAndLastNames);
@@ -100,26 +100,24 @@
 
       // Array.prototype.reduce()
       // 4. How many years did all the inventors live all together?
-      const cumulativeYears = inventors.reduce(
-        (accumulator, inventor) => {
-          const yearsLived = inventor.passed - inventor.year;
-          accumulator.years += yearsLived;
-          return accumulator;
-        },
-        { years: 0 }
-      );
+      const cumulativeYears = inventors.reduce((accumulator, inventor) => {
+        const yearsLived = inventor.passed - inventor.year;
+        accumulator += yearsLived;
+        return accumulator;
+      }, 0);
 
-      console.log("cumulativeYears", cumulativeYears.years);
+      console.log("cumulativeYears", cumulativeYears);
 
       // 5. Sort the inventors by years lived
       const sortedByYearsLived = inventors.sort(
         (currentInventor, nextInventor) => {
           const currentYearsLived =
             currentInventor.passed - currentInventor.year;
+          currentInventor.ageAtDeath = currentYearsLived;
           const nextInventorYearsLived =
             nextInventor.passed - nextInventor.year;
 
-          return currentInventor - nextInventorYearsLived;
+          return currentYearsLived - nextInventorYearsLived;
         }
       );
 
@@ -192,11 +190,10 @@
       ];
 
       const countedStrings = data.reduce((accumulator, string) => {
-        if (accumulator[string]) {
-          accumulator[string] += 1;
-        } else {
-          accumulator[string] = 1;
+        if (!accumulator[string]) {
+          accumulator[string] = 0;
         }
+        accumulator[string] += 1;
         return accumulator;
       }, {});
 
