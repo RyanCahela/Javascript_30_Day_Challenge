@@ -55,21 +55,12 @@
           const highlightEndIndex =
             highlightStartIndex + lowercaseSearchString.length;
 
-          //index of searchString not found
+          //No match found
           if (highlightStartIndex === -1) return false;
-
-
-          if (
-            highlightEndIndex - highlightStartIndex <
-            lowercaseSearchString.length
-          ) {
-            return false;
-          }
 
           //attach highlight indexes for later usage
           cityObj.highlightStartIndex = highlightStartIndex;
           cityObj.highlightEndIndex = highlightEndIndex;
-
           return true;
         });
       }
@@ -90,9 +81,11 @@
 
           return (accumulator += `
           <li>
-            <span>${startText}<span><!--
-            --><span class="hl">${highlightedText}</span><!--
-            --><span>${endText}<span>
+            <span>
+              <span>${startText}</span><!--
+              --><span class="hl">${highlightedText}</span><!--
+              --><span>${endText}</span>
+            </span>
           </li>`);
         }, "");
       }
