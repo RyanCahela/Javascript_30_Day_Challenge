@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <canvas id="draw" width="640" height="480"></canvas>
+    <script>
+      const canvas = document.getElementById("draw");
+      const ctx = canvas.getContext("2d");
+      const HEIGHT = canvas.height;
+      const WIDTH = canvas.width;
+      ctx.textBaseLine = "top";
+
+      let timeOfLastFrame = 0;
+
+      const mousePos = { x: 0, y: 0 };
+      const lineStartPos = { x: 0, y: 0 };
+      let isMarkerOn = false;
+
+      //detect mousedown on canvas
+      canvas.addEventListener("mousedown", (e) => {
+        const { x: mousePosX, y: mousePosY } = getCurrentPositionInCanvas(e);
+        // if click set marker on
+        isMarkerOn = true;
+        lineStartPos.x = mousePosX;
+        lineStartPos.y = mousePosY;
+        console.log("isMarkerOn", isMarkerOn);
+      });
+
+      //detect mouseup on canvas
+      canvas.addEventListener("mouseup", (e) => {
+        isMarkerOn = false;
+        console.log("isMarkerOn", isMarkerOn);
+      });
+      //if mouseup set marker off
+
+      canvas.addEventListener("mousemove", (e) => {
+        const { x: mousePosX, y: mousePosY } = getCurrentPositionInCanvas(e);
+
+        drawMarker(mousePosX, mousePosY);
+
+        //set new line start for next mousemove event
+        lineStartPos.x = mousePosX;
+        lineStartPos.y = mousePosY;
+      });
+
+      const loop = (totalElapsedTime) => {
+        const currentTime = totalElapsedTime / 1000; //convert miliseconds to seconds
+        const deltaTime = timeOfLastFrame - currentTime;
+        timeOfLastFrame = currentTime;
+
+        requestAnimationFrame(loop);
+        //ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+        displayMousePosition();
+      };
+
+      function drawMarker(mousePosX, mousePosY) {
+        if (!isMarkerOn) return;
+        const colorChangeSpeed = 100;
+        const hue = (100 * colorChangeSpeed) % 360;
+
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.lineWith = 10;
+        ctx.beginPath();
+        ctx.moveTo(lineStartPos.x, lineStartPos.y);
+        ctx.lineTo(mousePosX, mousePosY);
+        ctx.stroke();
+      }
+
+      function displayMousePosition() {
+        //display mouse position
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.font = "20pt monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          `x:${mousePos.x}, y: ${mousePos.y}`,
+          WIDTH - WIDTH / 2,
+          HEIGHT - HEIGHT / 2
+        );
+        ctx.restore();
+        //end display mouse position;
+      }
+
+      function getCurrentPositionInCanvas(mouseEvent) {
+        const { clientX, clientY } = mouseEvent;
+        const { left, top } = canvas.getBoundingClientRect();
+        return { x: clientX - left, y: clientY - top };
+      }
+
+      requestAnimationFrame(loop);
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      canvas {
+        border: 2px solid #212121;
+      }
+    </style>
+  </body>
+</html>

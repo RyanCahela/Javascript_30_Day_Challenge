@@ -54,16 +54,17 @@
 
       // Array.prototype.findIndex()
       // Find the comment with this ID
-      let commentIndex = comments.find((comment) => comment.id === 823423);
-
+      let commentIndex = comments.findIndex((comment) => comment.id === 823423);
+      console.log("commentIndex", commentIndex);
       // delete the comment with the ID of 823423
 
       //functional solution
       let newCommentsArray = comments.filter(
-        (comment, index) => index != commentIndex
+        (comment, index) => index !== commentIndex
       );
 
-      console.log("functional solution", newCommentsArray);
+      console.log("original array", comments);
+      console.log("newCommentsArray", newCommentsArray);
 
       //in place solution
       comments.splice(commentIndex, 1);
