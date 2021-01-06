@@ -18,6 +18,9 @@
       const mousePos = { x: 0, y: 0 };
       const lineStartPos = { x: 0, y: 0 };
       let isMarkerOn = false;
+      let lineHue = 1; //between 1 and 360;
+      let lineWidth = 1;
+      let lineSizeDirection = 1; //1 or -1;
 
       //detect mousedown on canvas
       canvas.addEventListener("mousedown", (e) => {
@@ -32,6 +35,7 @@
       //detect mouseup on canvas
       canvas.addEventListener("mouseup", (e) => {
         isMarkerOn = false;
+        lineWidth = 1;
         console.log("isMarkerOn", isMarkerOn);
       });
       //if mouseup set marker off
@@ -44,6 +48,11 @@
         //set new line start for next mousemove event
         lineStartPos.x = mousePosX;
         lineStartPos.y = mousePosY;
+      });
+
+      canvas.addEventListener("mouseleave", (e) => {
+        isMarkerOn = false;
+        lineWidth = 1;
       });
 
       const loop = (totalElapsedTime) => {
@@ -59,11 +68,20 @@
 
       function drawMarker(mousePosX, mousePosY) {
         if (!isMarkerOn) return;
-        const colorChangeSpeed = 100;
-        const hue = (100 * colorChangeSpeed) % 360;
+        if (lineWidth >= 100 || lineWidth <= 0) {
+          lineSizeDirection = -lineSizeDirection;
+        }
 
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        ctx.lineWith = 10;
+        const colorChangeSpeed = 10;
+        lineHue += colorChangeSpeed;
+        lineWidth += lineSizeDirection;
+
+        console.log("lineWidth", lineWidth);
+
+        ctx.strokeStyle = `hsl(${lineHue}, 100%, 50%)`;
+        ctx.lineWidth = lineWidth;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(lineStartPos.x, lineStartPos.y);
         ctx.lineTo(mousePosX, mousePosY);
