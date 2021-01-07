@@ -11,65 +11,50 @@
       const ctx = canvas.getContext("2d");
       const HEIGHT = canvas.height;
       const WIDTH = canvas.width;
-      ctx.textBaseLine = "top";
 
-      let timeOfLastFrame = 0;
-
-      const mousePos = { x: 0, y: 0 };
       const lineStartPos = { x: 0, y: 0 };
-      let isMarkerOn = false;
-      let lineHue = 1; //between 1 and 360;
+      let isLineOn = false;
+      let lineHue = 1;
       let lineWidth = 1;
       let lineSizeDirection = 1; //1 or -1;
 
       //detect mousedown on canvas
       canvas.addEventListener("mousedown", (e) => {
-        const { x: mousePosX, y: mousePosY } = getCurrentPositionInCanvas(e);
-        // if click set marker on
-        isMarkerOn = true;
-        lineStartPos.x = mousePosX;
-        lineStartPos.y = mousePosY;
-        lineWidth = 1;
-        console.log("isMarkerOn", isMarkerOn);
+        isLineOn = true;
+        console.log("e", e);
+        //start the line
+        lineStartPos.x = e.offsetX;
+        lineStartPos.y = e.offsetY;
       });
 
-      //detect mouseup on canvas
       canvas.addEventListener("mouseup", (e) => {
-        isMarkerOn = false;
+        //stop and reset the line
+        isLineOn = false;
         lineWidth = 1;
-        console.log("isMarkerOn", isMarkerOn);
       });
-      //if mouseup set marker off
 
       canvas.addEventListener("mousemove", (e) => {
-        const { x: mousePosX, y: mousePosY } = getCurrentPositionInCanvas(e);
+        const lineEndPos = { x: e.offsetX, y: e.offsetY };
+        drawLine(lineStartPos, lineEndPos);
+        //displayMousePosition(e);
 
-        drawMarker(mousePosX, mousePosY);
-
-        //set new line start for next mousemove event
-        lineStartPos.x = mousePosX;
-        lineStartPos.y = mousePosY;
+        //set line start to current position for next fired mousemove event
+        lineStartPos.x = lineEndPos.x;
+        lineStartPos.y = lineEndPos.y;
       });
 
       canvas.addEventListener("mouseleave", (e) => {
-        isMarkerOn = false;
+        isLineOn = false;
         lineWidth = 1;
       });
 
-      const loop = (totalElapsedTime) => {
-        const currentTime = totalElapsedTime / 1000; //convert miliseconds to seconds
-        const deltaTime = timeOfLastFrame - currentTime;
-        timeOfLastFrame = currentTime;
+      function drawLine(lineStartPos, lineEndPos) {
+        if (!isLineOn) return;
 
-        requestAnimationFrame(loop);
-        //ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
-        displayMousePosition();
-      };
-
-      function drawMarker(mousePosX, mousePosY) {
-        if (!isMarkerOn) return;
-        if (lineWidth >= 100 || lineWidth <= 0) {
+        //flucuate line size;
+        const lineMaxWidth = 100;
+        const lineMinWidth = 0;
+        if (lineWidth >= lineMaxWidth || lineWidth <= lineMinWidth) {
           lineSizeDirection = -lineSizeDirection;
         }
 
@@ -77,40 +62,31 @@
         lineHue += colorChangeSpeed;
         lineWidth += lineSizeDirection;
 
-        console.log("lineWidth", lineWidth);
-
         ctx.strokeStyle = `hsl(${lineHue}, 100%, 50%)`;
         ctx.lineWidth = lineWidth;
         ctx.lineJoin = "round";
         ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(lineStartPos.x, lineStartPos.y);
-        ctx.lineTo(mousePosX, mousePosY);
+        ctx.lineTo(lineEndPos.x, lineEndPos.y);
         ctx.stroke();
       }
 
-      function displayMousePosition() {
+      function displayMousePosition(e) {
+        const { offsetX, offsetY } = e;
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
         //display mouse position
-        ctx.save();
         ctx.fillStyle = "black";
         ctx.font = "20pt monospace";
         ctx.textAlign = "center";
         ctx.fillText(
-          `x:${mousePos.x}, y: ${mousePos.y}`,
+          `x:${offsetX}, y: ${offsetY}`,
           WIDTH - WIDTH / 2,
           HEIGHT - HEIGHT / 2
         );
-        ctx.restore();
         //end display mouse position;
       }
-
-      function getCurrentPositionInCanvas(mouseEvent) {
-        const { clientX, clientY } = mouseEvent;
-        const { left, top } = canvas.getBoundingClientRect();
-        return { x: clientX - left, y: clientY - top };
-      }
-
-      requestAnimationFrame(loop);
     </script>
 
     <style>

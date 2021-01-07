@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Console Tricks!</title>
+  </head>
+  <body>
+    <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+    <script>
+      const dogs = [
+        { name: "Snickers", age: 2 },
+        { name: "hugo", age: 8 },
+      ];
+
+      function makeGreen() {
+        const p = document.querySelector("p");
+        p.style.color = "#BADA55";
+        p.style.fontSize = "50px";
+      }
+
+      const p = document.querySelector("p");
+
+      // Regular
+      console.log("p", p);
+
+      // Interpolated
+      console.log("hello I am a %s string", "very short");
+
+      // Styled
+      console.log(
+        "%c this is my stylish message",
+        "font-size: 2rem; background-color: yellow; color: blue"
+      );
+
+      console.log(
+        "this is only %c half as stylish",
+        "font-size: 2rem; background-color: pink; color: green;"
+      );
+
+      // warning!
+      console.warn("this is a warning!");
+
+      // Error :|
+      console.error("this is an error!");
+
+      // Info
+      console.info("this is some info!");
+
+      // Testing
+      console.assert(
+        4 === 5,
+        "test failed! this message will always display because the condition will always be false"
+      );
+
+      // clearing
+      console.clear();
+
+      // Viewing DOM Elements
+      console.dir(p);
+
+      // Grouping together
+      dogs.forEach((dog, index) => {
+        console.group(`${dog.name}`);
+        console.log(`This dogs name is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.log(`This is the dog with index ${index}`);
+        console.groupEnd(`${dog.name}`);
+      });
+
+      // counting
+      console.count("times we've called the same value");
+      console.count("times we've called the same value");
+      console.count("times we've called the same value");
+      console.count("times we've called the same value");
+      console.count("different value");
+      console.count("times we've called the same value");
+      console.count("times we've called the same value");
+      console.count("times we've called the same value");
+      console.count("different value");
+
+      // timing
+      console.time("unique string");
+      fetch("https://jsonplaceholder.typicode.com/todos/1")
+        .then((res) => res.json())
+        .then((data) => {
+          console.timeEnd("unique string");
+          console.dir(data);
+        });
+
+      // stack trace
+      function mySupercoolFunction() {
+        function functionInception() {
+          console.trace();
+        }
+        functionInception();
+      }
+      mySupercoolFunction();
+    </script>
+  </body>
+</html>
