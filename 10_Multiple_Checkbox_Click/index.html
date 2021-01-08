@@ -98,13 +98,21 @@
       //get an array of items
       const inbox = document.querySelector(".inbox");
       inbox.addEventListener("click", handleInboxClick);
+      let lastClickedIndex = -1;
 
       function handleInboxClick(e) {
         if (e.target.tagName !== "INPUT") return;
         if (e.target.type !== "checkbox") return;
-        //handle only checkbox click
+        if (!e.target.checked) return;
+        //handle only checkbox enable click
+        const items = Array.from(this.children);
+        items.forEach((item, index) => {
+          const input = item.querySelector('input[type="checkbox"]');
+          if (input !== e.target) return;
+          lastClickedIndex = index;
+        });
 
-        console.log("checkbox clicked");
+        console.log(lastClickedIndex);
       }
 
       //iterate through array from start to end index and mark each box as checked
