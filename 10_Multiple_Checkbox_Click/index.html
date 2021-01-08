@@ -104,12 +104,10 @@
 
       checkboxes.forEach((checkbox, currentIndex) => {
         checkbox.addEventListener("click", (e) => {
-          console.log("e", e);
           isShiftKeyDown = e.shiftKey;
           if (firstCheckboxIndex === null) {
             //first click
             firstCheckboxIndex = currentIndex;
-            console.log("firstCheckboxIndex", firstCheckboxIndex);
             return;
           }
 
@@ -125,7 +123,6 @@
             isShiftKeyDown = e.shiftKey;
             return;
           }
-          console.log("normal click");
         });
       });
 
