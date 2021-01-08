@@ -97,65 +97,14 @@
     <script>
       //get an array of items
       const inbox = document.querySelector(".inbox");
-      const checkboxes = document.querySelectorAll('[type="checkbox"]');
-      let isShiftKeyDown = false;
-      let firstCheckboxIndex = null;
-      let secondCheckboxIndex = null;
+      inbox.addEventListener("click", handleInboxClick);
 
-      checkboxes.forEach((checkbox, currentIndex) => {
-        checkbox.addEventListener("click", (e) => {
-          isShiftKeyDown = e.shiftKey;
-          if (firstCheckboxIndex === null) {
-            //first click
-            firstCheckboxIndex = currentIndex;
-            return;
-          }
+      function handleInboxClick(e) {
+        if (e.target.tagName !== "INPUT") return;
+        if (e.target.type !== "checkbox") return;
+        //handle only checkbox click
 
-          //second click with shift key down
-          if (secondCheckboxIndex === null && isShiftKeyDown) {
-            //flip values if first index is greater than second index
-            if (currentIndex < firstCheckboxIndex) {
-              secondCheckboxIndex = firstCheckboxIndex;
-              firstCheckboxIndex = currentIndex;
-            } else {
-              secondCheckboxIndex = currentIndex;
-            }
-            isShiftKeyDown = e.shiftKey;
-            return;
-          }
-        });
-      });
-
-      inbox.addEventListener("change", function (e) {
-        if (firstCheckboxIndex === null) return;
-        if (secondCheckboxIndex === null) return;
-        if (!isShiftKeyDown) return;
-        const inboxChildren = this.children;
-
-        selectCheckboxBetweenIndex(
-          inboxChildren,
-          firstCheckboxIndex,
-          secondCheckboxIndex
-        );
-      });
-
-      function selectCheckboxBetweenIndex(
-        htmlCollection,
-        firstCheckboxIndex,
-        secondCheckboxIndex
-      ) {
-        for (let i = 0; i < htmlCollection.length; i++) {
-          const node = htmlCollection[i];
-          const currentIndex = i;
-          const checkbox = node.querySelector("input");
-          console.log("checkbox", checkbox);
-          if (
-            firstCheckboxIndex <= currentIndex &&
-            secondCheckboxIndex >= currentIndex
-          ) {
-            checkbox.checked = true;
-          }
-        }
+        console.log("checkbox clicked");
       }
 
       //iterate through array from start to end index and mark each box as checked
