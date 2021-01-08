@@ -105,6 +105,7 @@
       checkboxes.forEach((checkbox, currentIndex) => {
         checkbox.addEventListener("click", (e) => {
           console.log("e", e);
+          isShiftKeyDown = e.shiftKey;
           if (firstCheckboxIndex === null) {
             //first click
             firstCheckboxIndex = currentIndex;
@@ -113,7 +114,7 @@
           }
 
           //second click with shift key down
-          if (secondCheckboxIndex === null && e.shiftKey) {
+          if (secondCheckboxIndex === null && isShiftKeyDown) {
             //flip values if first index is greater than second index
             if (currentIndex < firstCheckboxIndex) {
               secondCheckboxIndex = firstCheckboxIndex;
@@ -122,13 +123,16 @@
               secondCheckboxIndex = currentIndex;
             }
             isShiftKeyDown = e.shiftKey;
+            return;
           }
+          console.log("normal click");
         });
       });
 
       inbox.addEventListener("change", function (e) {
         if (firstCheckboxIndex === null) return;
         if (secondCheckboxIndex === null) return;
+        if (!isShiftKeyDown) return;
         const inboxChildren = this.children;
 
         selectCheckboxBetweenIndex(
