@@ -15,10 +15,10 @@ playerControls.addEventListener("click", (e) => {
       handlePlayButtonClick();
       break;
     case "skip-back_button":
-      console.log(referenceString);
+      handleSkipBackward(e.target.dataset.skip);
       break;
     case "skip-forward_button":
-      console.log(referenceString);
+      handleSkipForward(e.target.dataset.skip);
       break;
     default:
       break;
@@ -33,6 +33,8 @@ playerControls.addEventListener("input", (e) => {
       break;
     case "playback-rate_range":
       handlePlaybackRangeInput(e.target.value);
+      break;
+    default:
       break;
   }
 });
@@ -51,4 +53,12 @@ function handleVolumeRangeInput(volumeLevel) {
 
 function handlePlaybackRangeInput(playbackRate) {
   playerVideo.playbackRate = playbackRate;
+}
+
+function handleSkipForward(skipAmount) {
+  playerVideo.currentTime += parseFloat(skipAmount);
+}
+
+function handleSkipBackward(skipAmount) {
+  playerVideo.currentTime += parseFloat(skipAmount);
 }
