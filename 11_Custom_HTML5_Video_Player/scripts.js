@@ -4,9 +4,11 @@ const playerVideo = document.querySelector(
 const playerControls = document.querySelector(
   'div[data-js-reference="player_controls"]'
 );
-
 const progressBar = playerControls.querySelector(
   'div[data-js-reference="progress_bar"]'
+);
+const progressControls = playerControls.querySelector(
+  'div[data-js-reference="progress_controls"]'
 );
 
 playerVideo.addEventListener("timeupdate", (e) => {
@@ -16,6 +18,8 @@ playerVideo.addEventListener("timeupdate", (e) => {
 
 playerControls.addEventListener("click", (e) => {
   const referenceString = e.target.dataset.jsReference;
+
+  console.log();
 
   switch (referenceString) {
     case "play_button":
@@ -27,6 +31,10 @@ playerControls.addEventListener("click", (e) => {
     case "skip-forward_button":
       handleSkipForward(e.target.dataset.skip);
       break;
+    case "progress_controls":
+      handleProgressControlsClick(e);
+    case "progress_bar":
+      handleProgressControlsClick(e);
     default:
       break;
   }
@@ -59,12 +67,16 @@ function handlePlayButtonClick() {
   }
 }
 
-function handleVolumeRangeInput(volumeLevel) {
-  playerVideo.volume = volumeLevel;
-}
-
 function handlePlaybackRangeInput(playbackRate) {
   playerVideo.playbackRate = playbackRate;
+}
+
+function handleProgressControlsClick(mouseEvent) {
+  const { width } = progressControls.getBoundingClientRect();
+  const { offsetX } = mouseEvent;
+  const percentileClicked = offsetX / width;
+  const timeToMoveTo = playerVideo.duration * percentileClicked;
+  playerVideo.currentTime = timeToMoveTo;
 }
 
 function handleSkipForward(skipAmount) {
@@ -73,4 +85,8 @@ function handleSkipForward(skipAmount) {
 
 function handleSkipBackward(skipAmount) {
   playerVideo.currentTime += parseFloat(skipAmount);
+}
+
+function handleVolumeRangeInput(volumeLevel) {
+  playerVideo.volume = volumeLevel;
 }
