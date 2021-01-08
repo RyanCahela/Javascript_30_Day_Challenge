@@ -5,7 +5,14 @@ const playerControls = document.querySelector(
   'div[data-js-reference="player_controls"]'
 );
 
-//playerVideo.addEventListener("click", handlePlayButtonClick);
+const progressBar = playerControls.querySelector(
+  'div[data-js-reference="progress_bar"]'
+);
+
+playerVideo.addEventListener("timeupdate", (e) => {
+  const { duration, currentTime } = e.target;
+  updateProgressBar(duration, currentTime);
+});
 
 playerControls.addEventListener("click", (e) => {
   const referenceString = e.target.dataset.jsReference;
@@ -38,6 +45,11 @@ playerControls.addEventListener("input", (e) => {
       break;
   }
 });
+
+function updateProgressBar(totalDuration, currentTime) {
+  const percentageDone = (currentTime / totalDuration) * 100;
+  progressBar.style.flexBasis = `${percentageDone}%`;
+}
 
 function handlePlayButtonClick() {
   if (playerVideo.paused) {
