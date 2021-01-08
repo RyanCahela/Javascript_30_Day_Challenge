@@ -16,6 +16,15 @@ playerVideo.addEventListener("timeupdate", (e) => {
   updateProgressBar(duration, currentTime);
 });
 
+playerVideo.addEventListener("click", (e) => {
+  const player = e.currentTarget;
+  if (player.paused) {
+    player.play();
+  } else {
+    player.pause();
+  }
+});
+
 playerControls.addEventListener("click", (e) => {
   const referenceString = e.target.dataset.jsReference;
 
