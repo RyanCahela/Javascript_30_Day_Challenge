@@ -98,7 +98,8 @@
       //get an array of items
       const inbox = document.querySelector(".inbox");
       inbox.addEventListener("click", handleInboxClick);
-      let lastClickedIndex = -1;
+      let lastClicked = 0;
+      let inBetween = false;
 
       function handleInboxClick(e) {
         if (e.target.tagName !== "INPUT") return;
@@ -106,13 +107,24 @@
         if (!e.target.checked) return;
         //handle only checkbox enable click
         const items = Array.from(this.children);
+
+        //set last clicked index on non shift clicks
         items.forEach((item, index) => {
           const input = item.querySelector('input[type="checkbox"]');
-          if (input !== e.target) return;
-          lastClickedIndex = index;
-        });
+          if (e.shiftKey && lastClicked.tagName === "INPUT") {
+            if (input === lastClicked || input === e.target) {
+              inBetween = !inBetween;
+            }
 
-        console.log(lastClickedIndex);
+            if (inBetween) {
+              input.checked = true;
+            }
+          }
+
+          if (input !== e.target) return;
+          if (e.shiftKey) return;
+          lastClicked = input;
+        });
       }
 
       //iterate through array from start to end index and mark each box as checked
