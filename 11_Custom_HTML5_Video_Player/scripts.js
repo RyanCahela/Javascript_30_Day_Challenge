@@ -10,6 +10,9 @@ const progressBar = playerControls.querySelector(
 const progressControls = playerControls.querySelector(
   'div[data-js-reference="progress_controls"]'
 );
+const playButton = playerControls.querySelector(
+  'button[data-js-reference="play_button"]'
+);
 
 playerVideo.addEventListener("timeupdate", (e) => {
   const { duration, currentTime } = e.target;
@@ -17,13 +20,18 @@ playerVideo.addEventListener("timeupdate", (e) => {
 });
 
 playerVideo.addEventListener("click", (e) => {
-  const player = e.currentTarget;
-  if (player.paused) {
-    player.play();
-  } else {
-    player.pause();
-  }
+  togglePlay(e.target);
 });
+
+playerVideo.addEventListener("play", (e) => {
+  updatePlayButton(e.target);
+});
+
+playerVideo.addEventListener("pause", (e) => {
+  updatePlayButton(e.target);
+});
+
+//'❚ ❚'
 
 playerControls.addEventListener("click", (e) => {
   const referenceString = e.target.dataset.jsReference;
@@ -98,4 +106,17 @@ function handleSkipBackward(skipAmount) {
 
 function handleVolumeRangeInput(volumeLevel) {
   playerVideo.volume = volumeLevel;
+}
+
+function togglePlay(target) {
+  if (target.paused) {
+    target.play();
+  } else {
+    target.pause();
+  }
+}
+
+function updatePlayButton(videoElement) {
+  console.log(videoElement.paused);
+  playButton.textContent = videoElement.paused ? "►" : "❚ ❚";
 }
