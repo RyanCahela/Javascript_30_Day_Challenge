@@ -3,48 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <title>Key Detection</title>
-    <script
-      type="text/javascript"
-      src="https://www.cornify.com/js/cornify.js"
-    ></script>
+    <script type="text/javascript" src="cornify.js"></script>
   </head>
   <body>
     <script>
       const TIME_UNTIL_RESET = 2000; //miliseconds
-      let keydownCache = [];
-      let resetTimeoutId = "";
-      document.addEventListener("keydown", (e) => {
-        keydownCache.push(e.keyCode);
-        console.log("resetTimeoutId", resetTimeoutId);
+      const LEFT_ARROW = 37;
+      const UP_ARROW = 38;
+      const RIGHT_ARROW = 39;
+      const DOWN_ARROW = 40;
+      const A_KEY = 65;
+      const B_KEY = 66;
+      const ENTER_KEY = 13;
 
-        if (resetTimeoutId) {
+      const SECRET_CODE = [
+        UP_ARROW,
+        UP_ARROW,
+        DOWN_ARROW,
+        DOWN_ARROW,
+        LEFT_ARROW,
+        RIGHT_ARROW,
+        LEFT_ARROW,
+        RIGHT_ARROW,
+        B_KEY,
+        A_KEY,
+        ENTER_KEY,
+      ];
+
+      let keydownCache = [];
+      let resetTimeoutId = 0;
+      document.addEventListener("keydown", (e) => {
+        //cache keycode
+        keydownCache.push(e.keyCode);
+
+        //if timer exists reset it. if not start new one.
+        if (resetTimeoutId !== 0) {
           clearTimeout(resetTimeoutId);
-          resetTimeoutId = "";
           resetTimeoutId = startNewTimer();
-          console.log("clear and start new");
         } else {
           resetTimeoutId = startNewTimer();
-          console.log("just start new");
         }
 
         //see if cache contains Konami Code
-        //...
+        if (isEqualArray(keydownCache, SECRET_CODE)) {
+          cornify_add(); //from cornify library;
+          resetKeydownCache();
+        }
       });
+
+      function isEqualArray(arr1, arr2) {
+        if (!Array.isArray(arr1)) return;
+        if (!Array.isArray(arr2)) return;
+        if (arr1.length !== arr2.length) return;
+        return arr2.every((val, index) => val === arr1[index]);
+      }
 
       function resetKeydownCache() {
         keydownCache = [];
         clearTimeout(resetTimeoutId);
         resetTimeoutId = "";
-        console.log("timer cleared");
       }
 
       function startNewTimer() {
         return setTimeout(resetKeydownCache, TIME_UNTIL_RESET);
       }
-
-      //when user presses key store that code in cache start reset timer
-      //on every keydown while timer is running reset timer.
-      //if now keydown withing 3 seconds reset cache
     </script>
   </body>
 </html>

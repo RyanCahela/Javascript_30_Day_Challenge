@@ -342,30 +342,30 @@ var cornify_add_cupcake_button = function () {
 };
 
 // Adapted from http://www.snaptortoise.com/konami-js/
-var cornami = {
-  input: "",
-  pattern: "38384040373937396665",
-  clear: setTimeout("cornami.clear_input()", 5000),
-  load: function () {
-    window.document.onkeydown = function (event) {
-      if (cornami.input == cornami.pattern) {
-        cornify_add();
-        clearTimeout(cornami.clear);
-        return;
-      } else {
-        cornami.input += event.keyCode;
-        if (cornami.input == cornami.pattern) {
-          cornify_add();
-        }
-        clearTimeout(cornami.clear);
-        cornami.clear = setTimeout("cornami.clear_input()", 5000);
-      }
-    };
-  },
-  clear_input: function () {
-    cornami.input = "";
-    clearTimeout(cornami.clear);
-  },
-};
+// var cornami = {
+//   input: "",
+//   pattern: "38384040373937396665",
+//   clear: setTimeout("cornami.clear_input()", 5000),
+//   load: function () {
+//     window.document.onkeydown = function (event) {
+//       if (cornami.input == cornami.pattern) {
+//         cornify_add();
+//         clearTimeout(cornami.clear);
+//         return;
+//       } else {
+//         cornami.input += event.keyCode;
+//         if (cornami.input == cornami.pattern) {
+//           cornify_add();
+//         }
+//         clearTimeout(cornami.clear);
+//         cornami.clear = setTimeout("cornami.clear_input()", 5000);
+//       }
+//     };
+//   },
+//   clear_input: function () {
+//     cornami.input = "";
+//     clearTimeout(cornami.clear);
+//   },
+// };
 
-cornami.load();
+//cornami.load();
