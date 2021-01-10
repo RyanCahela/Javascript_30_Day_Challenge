@@ -99,7 +99,7 @@
       const inbox = document.querySelector(".inbox");
       inbox.addEventListener("click", handleInboxClick);
       let lastClicked = 0;
-      let inBetween = false;
+      let isInBetween = false;
 
       function handleInboxClick(e) {
         if (e.target.tagName !== "INPUT") return;
@@ -110,14 +110,17 @@
 
         items.forEach((item, index) => {
           const input = item.querySelector('input[type="checkbox"]');
-          if (e.shiftKey && lastClicked.tagName === "INPUT") {
-            if (input === lastClicked || input === e.target) {
-              inBetween = !inBetween;
-            }
+          if (!e.shiftKey) return;
+          if (lastClicked.tagName !== "INPUT") return;
 
-            if (inBetween) {
-              input.checked = true;
-            }
+          if (input === lastClicked || input === e.target) {
+            //when at the beginning or end of the checkbox list selection
+            isInBetween = !isInBetween;
+          }
+
+          if (isInBetween) {
+            //check inbebetween checkboxes;
+            input.checked = true;
           }
 
           if (input !== e.target) return;
