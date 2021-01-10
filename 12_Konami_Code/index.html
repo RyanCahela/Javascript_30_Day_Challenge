@@ -10,9 +10,41 @@
   </head>
   <body>
     <script>
-      document.addEventListener('keydown', (e) => {
-        
+      const TIME_UNTIL_RESET = 2000; //miliseconds
+      let keydownCache = [];
+      let resetTimeoutId = "";
+      document.addEventListener("keydown", (e) => {
+        keydownCache.push(e.keyCode);
+        console.log("resetTimeoutId", resetTimeoutId);
+
+        if (resetTimeoutId) {
+          clearTimeout(resetTimeoutId);
+          resetTimeoutId = "";
+          resetTimeoutId = startNewTimer();
+          console.log("clear and start new");
+        } else {
+          resetTimeoutId = startNewTimer();
+          console.log("just start new");
+        }
+
+        //see if cache contains Konami Code
+        //...
       });
+
+      function resetKeydownCache() {
+        keydownCache = [];
+        clearTimeout(resetTimeoutId);
+        resetTimeoutId = "";
+        console.log("timer cleared");
+      }
+
+      function startNewTimer() {
+        return setTimeout(resetKeydownCache, TIME_UNTIL_RESET);
+      }
+
+      //when user presses key store that code in cache start reset timer
+      //on every keydown while timer is running reset timer.
+      //if now keydown withing 3 seconds reset cache
     </script>
   </body>
 </html>
