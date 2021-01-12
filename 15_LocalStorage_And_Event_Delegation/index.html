@@ -86,6 +86,7 @@
       });
 
       itemsList.addEventListener("change", (e) => {
+        if (e.target.dataset.itemsIndex === undefined) return;
         items[e.target.dataset.itemsIndex].isChecked = e.target.checked;
         setLocalStorage("tapas", items);
       });
