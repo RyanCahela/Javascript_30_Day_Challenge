@@ -1,40 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mouse Shadow</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Shadow</title>
+  </head>
+  <body>
+    <div class="hero">
+      <h1 contenteditable>&#128299; WOAH!</h1>
+    </div>
 
-  <div class="hero">
-    <h1 contenteditable>🔥WOAH!</h1>
-  </div>
+    <style>
+      html {
+        color: black;
+        font-family: sans-serif;
+      }
 
-  <style>
-  html {
-    color: black;
-    font-family: sans-serif;
-  }
+      body {
+        margin: 0;
+      }
 
-  body {
-    margin: 0;
-  }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+      }
 
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-  }
+      h1 {
+        text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+        font-size: 100px;
+      }
+    </style>
 
-  h1 {
-    text-shadow: 10px 10px 0 rgba(0,0,0,1);
-    font-size: 100px;
-  }
-  </style>
+    <script>
+      const MAX_X = 50;
+      const MAX_Y = 50;
+      const windowSize = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      const mousePositionPercentage = { x: 0, y: 0 };
+      const heading = document.querySelector("h1");
 
-<script>
-</script>
-</body>
+      window.addEventListener("mousemove", ({ clientX, clientY }) => {
+        const centerX = clientX - windowSize.width / 2;
+        const centerY = clientY - windowSize.height / 2;
+        mousePositionPercentage.x = centerX / windowSize.width;
+        mousePositionPercentage.y = centerY / windowSize.height;
+        console.log(mousePositionPercentage);
+        heading.style.textShadow = textShadowFromMousePosition(
+          mousePositionPercentage
+        );
+      });
+
+      window.addEventListener("resize", (e) => {
+        windowSize.width = window.innerWidth;
+        windowSize.height = window.innerHeight;
+      });
+
+      function textShadowFromMousePosition(mousePositionPercentage) {
+        const xOffset = mousePositionPercentage.x * MAX_X;
+        const yOffset = mousePositionPercentage.y * MAX_Y;
+        return `
+          ${-xOffset}px ${-yOffset}px rgba(0, 0, 0, 0.5),
+          ${xOffset}px ${yOffset}px rgba(255, 0, 0, 0.5),
+          ${-xOffset}px ${yOffset}px rgba(0, 255, 0, 0.5),
+          ${xOffset}px ${-yOffset}px rgba(0, 0, 255, 0.5)`;
+      }
+    </script>
+  </body>
 </html>
