@@ -44,6 +44,7 @@
     <ul id="bands"></ul>
 
     <script>
+      const ul = document.querySelector("ul");
       const bands = [
         "The Plot in You",
         "The Devil Wears Prada",
@@ -61,18 +62,40 @@
       ];
 
       const sortedBandNames = sortBandNames(bands);
-      insertBandNamesIntoDOM("ul", sortedBandNames);
+      insertBandNamesIntoDOM(ul, sortedBandNames);
 
-      function insertBandNamesIntoDOM(parentElement, bandNamesArr) {
-        const parent = document.querySelector(parentElement);
+      function insertBandNamesIntoDOM(parentNode, bandNamesArr) {
+        if (!Array.isArray(bandNamesArr)) {
+          printErrorMessage({
+            label: "bandNamesArr",
+            expectedType: "Array",
+            value: bandNamesArr,
+          });
+          return;
+        }
+        if (!(parentNode instanceof HTMLElement)) {
+          printErrorMessage({
+            label: "parentNode",
+            expectedType: "HTMLElement",
+            value: parentNode,
+          });
+          return;
+        }
         const domString = bandNamesArr.reduce((acc, bandName) => {
           acc += `<li>${bandName}</li>`;
           return acc;
         }, "");
-        parent.innerHTML = domString;
+        parentNode.innerHTML = domString;
       }
 
       function sortBandNames(arr) {
+        if (!Array.isArray(arr)) {
+          printErrorMessage({
+            label: "arr",
+            expectedType: "Array",
+            value: arr,
+          });
+        }
         const arrToSort = arr.slice();
         return arrToSort.sort((current, next) => {
           const currentName = removeArticle(current);
@@ -82,7 +105,21 @@
       }
 
       function removeArticle(string) {
+        if (typeof string !== "string") {
+          printErrorMessage({
+            label: string,
+            expectedType: "string",
+            value: string,
+          });
+        }
         return string.replace(/^(The |An |A )/i, "");
+      }
+
+      function printErrorMessage(args) {
+        const { label, expectedType, value } = args;
+        console.error(
+          `Expected ${label} to be of type ${expectedType} but recieved ${value} of type ${typeof value}`
+        );
       }
     </script>
   </body>
