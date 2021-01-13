@@ -60,63 +60,30 @@
         "An Old Dog",
       ];
 
-      const arrayOfBandNameObjects = bands.map((band) => {
-        const articlesToMatch = /(The |An |A )/;
-        const arr = splitStringOnRegEx(articlesToMatch, band);
-        const obj = {};
-        if (arr.length === 1) {
-          obj.name = arr[0];
-        } else if (arr.length === 2) {
-          obj.article = arr[0];
-          obj.name = arr[1];
-        } else {
-          console.error(`Array had length of ${arr.length}`);
-        }
-        return obj;
-        /*
-          {
-            article: "",
-            name: "",
-          }
-        */
-      });
+      const sortedBandNames = sortBandNames(bands);
+      insertBandNamesIntoDOM("ul", sortedBandNames);
 
-      const sorted = sortBandNames(arrayOfBandNameObjects);
-
-      const rejoinedBandNames = bandNameObjectsToString(sorted);
+      function insertBandNamesIntoDOM(parentElement, bandNamesArr) {
+        const parent = document.querySelector(parentElement);
+        const domString = bandNamesArr.reduce((acc, bandName) => {
+          acc += `<li>${bandName}</li>`;
+          return acc;
+        }, "");
+        parent.innerHTML = domString;
+      }
 
       function sortBandNames(arr) {
-        const sortedArr = arr.slice();
-        return sortedArr.sort((currentBandNameObj, nextBandNameObj) => {
-          const { name: currentName } = currentBandNameObj;
-          const { name: nextName } = nextBandNameObj;
+        const arrToSort = arr.slice();
+        return arrToSort.sort((current, next) => {
+          const currentName = removeArticle(current);
+          const nextName = removeArticle(next);
           return currentName.localeCompare(nextName);
         });
       }
 
-      function splitStringOnRegEx(regEx, string) {
-        const split = string.split(regEx);
-        //I really don't like the following line but all the split
-        //arrays have an empty string at the beginning for some reason
-        if (split.length >= 2) split.shift();
-        return split;
+      function removeArticle(string) {
+        return string.replace(/^(The |An |A )/i, "");
       }
-
-      function bandNameObjectsToString(arr) {
-        const mergeBandNamesToString = (acc, bandNameObj) => {
-          const { article, name } = bandNameObj;
-          let fullBandName = "";
-          if (article) {
-            fullBandName = article + name;
-          } else {
-            fullBandName = name;
-          }
-          acc += fullBandName + "\n";
-          return acc;
-        };
-        return arr.reduce(mergeBandNamesToString, "");
-      }
-      console.log(rejoinedBandNames);
     </script>
   </body>
 </html>
