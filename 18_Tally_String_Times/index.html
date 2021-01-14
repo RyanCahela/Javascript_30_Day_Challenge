@@ -79,17 +79,17 @@
           seconds: 0,
         }
       );
-      console.log(accumulatedTime);
 
       const accumulatedTimeString = createTimeString(accumulatedTime);
 
       function createTimeString(accumulatedTimeObj) {
         const { minutes, seconds } = accumulatedTimeObj;
         const minutesInHour = 60;
+        const secondsInMinute = 60;
         const totalHours = Math.trunc(
           (minutes + secondsToMinutesInt(seconds)) / minutesInHour
         );
-        const totalSeconds = seconds % 60;
+        const totalSeconds = seconds % secondsInMinute;
         const totalMinutes =
           (minutes + secondsToMinutesInt(seconds)) % minutesInHour;
         return `${totalHours} Hours, ${totalMinutes} Minutes, ${totalSeconds} Seconds`;
