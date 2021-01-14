@@ -12,7 +12,6 @@ function accumulateTime(acc, listItem) {
   const [minutes, seconds] = listItem.dataset.time.split(":");
   acc.minutes += parseInt(minutes);
   acc.seconds += parseInt(seconds);
-  console.log(acc);
   return acc;
 }
 
