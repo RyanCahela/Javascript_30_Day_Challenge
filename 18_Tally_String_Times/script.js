@@ -16,6 +16,8 @@ const accumulatedTimeString = createTimeString(accumulatedTime);
 
 function createTimeString(accumulatedTimeObj) {
   const { minutes, seconds } = accumulatedTimeObj;
+  if (minutes < 0) throw new Error(`value of minutes was ${minutes}`);
+  if (seconds < 0) throw new Error(`value of seconds was ${seconds}`);
   const minutesInHour = 60;
   const secondsInMinute = 60;
   const totalHours = Math.trunc(
@@ -27,6 +29,14 @@ function createTimeString(accumulatedTimeObj) {
 }
 
 function secondsToMinutesInt(seconds) {
+  if (typeof seconds !== "number") {
+    throw Error(
+      `seconds must be of type Number, recieved type ${typeof seconds} instead`
+    );
+  }
+  if (seconds < 0) {
+    throw new Error(`seconds must be positive, recieved ${seconds} instead`);
+  }
   const secondsInMinute = 60;
   return Math.trunc(seconds / secondsInMinute);
 }
