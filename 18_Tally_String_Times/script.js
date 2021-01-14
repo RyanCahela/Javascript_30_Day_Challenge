@@ -32,3 +32,8 @@ function secondsToMinutesInt(seconds) {
 }
 
 console.log(accumulatedTimeString);
+
+module.exports = {
+  secondsToMinutesInt,
+  createTimeString,
+};
