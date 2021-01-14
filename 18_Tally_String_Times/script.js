@@ -8,9 +8,11 @@ console.log(accumulatedTimeString);
 
 //helper functions
 function accumulateTime(acc, listItem) {
+  if (listItem.length === 0) return acc;
   const [minutes, seconds] = listItem.dataset.time.split(":");
   acc.minutes += parseInt(minutes);
   acc.seconds += parseInt(seconds);
+  console.log(acc);
   return acc;
 }
 
@@ -46,4 +48,5 @@ function secondsToMinutesInt(seconds) {
 module.exports = {
   secondsToMinutesInt,
   createTimeString,
+  accumulateTime,
 };

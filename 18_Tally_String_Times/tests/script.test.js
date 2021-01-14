@@ -1,4 +1,12 @@
-const { secondsToMinutesInt, createTimeString } = require("../script");
+const {
+  secondsToMinutesInt,
+  createTimeString,
+  accumulateTime,
+} = require("../script");
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const dom = new JSDOM("<!DOCTYPE html>");
 
 describe("secondsToMinuteInt success assertions", () => {
   test("converts 60 seconds to 1 minute", () => {
@@ -87,5 +95,35 @@ describe("createTimeString fail assertions", () => {
     expect(wrapper).toThrow(
       `value of seconds was ${accumulatedTimeObj.seconds}`
     );
+  });
+});
+
+describe("accumulateTime success assertions", () => {
+  test("returns 0's if array empty", () => {
+    const array = [];
+    const accumulator = {
+      minutes: 0,
+      seconds: 0,
+    };
+    expect(accumulateTime(accumulator, array)).toHaveProperty("minutes", 0);
+    expect(accumulateTime(accumulator, array)).toHaveProperty("seconds", 0);
+  });
+
+  test("returns {minutes: 2, seconds: 30}", () => {
+    const times = ["1:30", "1:00"];
+    const arrayOfDOMNodes = times.map((time) => {
+      const el = dom.window.document.createElement("li");
+      el.dataset.time = time;
+      return el;
+    });
+
+    const accumulator = {
+      minutes: 0,
+      seconds: 0,
+    };
+
+    const result = arrayOfDOMNodes.reduce(accumulateTime, accumulator);
+    expect(result).toHaveProperty("minutes", 2);
+    expect(result).toHaveProperty("seconds", 30);
   });
 });
