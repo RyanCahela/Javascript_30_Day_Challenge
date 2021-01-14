@@ -67,11 +67,33 @@
     </ul>
     <script>
       const listItems = Array.from(document.querySelectorAll("li[data-time]"));
-      const accumulatedTime = listItems.reduce((acc, listItem) => {}, {
-        accumulatedMinutes: 0,
-        accumulatedSeconds: 0,
-        accumulatedHours: 0,
-      });
+      const accumulatedTime = listItems.reduce(
+        (acc, listItem, currentindex, listItemsArray) => {
+          const [minutes, seconds] = listItem.dataset.time.split(":");
+          acc.minutes += parseInt(minutes);
+          acc.seconds += parseInt(seconds);
+          return acc;
+        },
+        {
+          minutes: 0,
+          seconds: 0,
+        }
+      );
+      console.log(accumulatedTime);
+
+      const accumulatedTimeString = createTimeString(accumulatedTime);
+
+      function createTimeString(accumulatedTimeObj) {
+        const { minutes, seconds } = accumulatedTimeObj;
+        console.log((minutes + Math.trunc(seconds / 60)) / 60);
+        const totalHours = Math.trunc(
+          (minutes + Math.trunc(seconds / 60)) / 60
+        );
+        const totalSeconds = seconds % 60;
+        const totalMinutes = (minutes + Math.trunc(seconds / 60)) % 60;
+        return `${totalHours} Hours, ${totalMinutes} Minutes, ${totalSeconds} Seconds`;
+      }
+      console.log(accumulatedTimeString);
     </script>
   </body>
 </html>
