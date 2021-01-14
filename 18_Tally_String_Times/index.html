@@ -85,14 +85,21 @@
 
       function createTimeString(accumulatedTimeObj) {
         const { minutes, seconds } = accumulatedTimeObj;
-        console.log((minutes + Math.trunc(seconds / 60)) / 60);
+        const minutesInHour = 60;
         const totalHours = Math.trunc(
-          (minutes + Math.trunc(seconds / 60)) / 60
+          (minutes + secondsToMinutesInt(seconds)) / minutesInHour
         );
         const totalSeconds = seconds % 60;
-        const totalMinutes = (minutes + Math.trunc(seconds / 60)) % 60;
+        const totalMinutes =
+          (minutes + secondsToMinutesInt(seconds)) % minutesInHour;
         return `${totalHours} Hours, ${totalMinutes} Minutes, ${totalSeconds} Seconds`;
       }
+
+      function secondsToMinutesInt(seconds) {
+        const secondsInMinute = 60;
+        return Math.trunc(seconds / secondsInMinute);
+      }
+
       console.log(accumulatedTimeString);
     </script>
   </body>
