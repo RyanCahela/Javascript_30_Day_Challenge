@@ -7,8 +7,7 @@ const constraints = {
     width: 640,
     height: 480,
     facingMode: "user",
-    deviceId:
-      "40824012d1094e03d97dafa0acb3c4132d4da26fe62f8dd37b4b228d8c5eceb1",
+    deviceId: cameraSelect.value,
   },
 };
 getDeviceStream(constraints);
@@ -27,7 +26,7 @@ function populateCameraSelect() {
           //select first option on page load
           const selected = index === 0 ? "selected" : "";
           return `
-          <option ${selected} data-device-id="${mediaDeviceInfo.deviceId}">${mediaDeviceInfo.label}</option> 
+          <option ${selected} value="${mediaDeviceInfo.deviceId}">${mediaDeviceInfo.label}</option> 
         `;
         })
         .join("");
@@ -52,3 +51,5 @@ function getDeviceStream(constraints) {
     })
     .catch((err) => console.error(err));
 }
+
+
