@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roll My Own webcam Viewer</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      h1 {
+        align-self: stretch;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: seashell;
+        background-color: #212121;
+        margin: 0;
+        padding: 20px;
+      }
+      video {
+        border: 1px solid #212121;
+        width: 640px;
+        height: 480px;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Webcam Viewer</h1>
+    <video controls></video>
+    <script src="script.js"></script>
+  </body>
+</html>
