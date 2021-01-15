@@ -52,4 +52,25 @@ function getDeviceStream(constraints) {
     .catch((err) => console.error(err));
 }
 
+cameraSelect.addEventListener("change", (e) => {
+  const constraints = {
+    audio: false,
+    video: {
+      width: 640,
+      height: 480,
+      facingMode: "user",
+      deviceId: e.target.value,
+    },
+  };
 
+  navigator.mediaDevices
+    .getUserMedia(constraints)
+    .then((mediaStreamObj) => {
+      if ("srcObject" in video) {
+        video.srcObject = mediaStreamObj;
+      } else {
+        video.src = window.URL.createObjectURL(mediaStreamObj);
+      }
+    })
+    .catch((err) => console.error(err));
+});
